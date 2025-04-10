@@ -1,45 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Portal</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brilliant News Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+    }
+
+    .navbar {
+      background-color: #203a43;
+    }
+
+    .navbar-brand,
+    .nav-link,
+    .form-control {
+      color: white !important;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .hero {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      padding: 100px 20px;
+      text-align: center;
+      animation: fadeIn 2s ease-in;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      animation: slideIn 1.5s ease-out;
+    }
+
+    .news-card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .news-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .news-image {
+      height: 200px;
+      width: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .news-card:hover .news-image {
+      transform: scale(1.1);
+    }
+
+    .news-body {
+      padding: 20px;
+    }
+
+    .news-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .news-card:hover .news-title {
+      color: #007bff;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    footer {
+      background-color: #203a43;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 50px;
+    }
+
+    /* Back to Top Button */
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      font-size: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      display: none;
+      transition: background-color 0.3s;
+      z-index: 1000;
+    }
+
+    #backToTop:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
+
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">News Portal</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#" id="home-btn">Home</a>
-                </li>
-                <li class="nav-item">
-                    <input type="text" id="search-input" class="form-control" placeholder="Search News..." aria-label="Search">
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-outline-success ml-2" id="search-btn">Search</button>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-        <h1 class="text-center my-4">Latest News</h1>
-
-        <!-- News Headlines -->
-        <div id="news-grid" class="row">
-            <!-- News articles will be injected here dynamically -->
-        </div>
+      <a class="navbar-brand" href="#">Brilliant News</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">World</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Technology</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Health</a></li>
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control bg-transparent border-white" type="search" placeholder="Search news..."
+            aria-label="Search">
+        </form>
+      </div>
     </div>
+  </nav>
 
-    <script src="script.js"></script>
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Top Stories of the Day</h1>
+    <p>Stay updated with the latest news across the world</p>
+  </div>
+
+  <!-- News Cards -->
+    <div class="container py-5">
+      <div class="row g-4">
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img src="https://i.pinimg.com/736x/44/3e/bd/443ebdbb3b98f7e1cb701a4bbe569c7d.jpg" class="news-image"
+              alt="Tech News">
+            <div class="news-body">
+              <h5 class="news-title">Tech Revolution</h5>
+              <p class="card-text">AI continues to reshape how we live, work, and communicate. From automation to
+                personalized experiences, industries are adapting rapidly. Experts believe AI could surpass human
+                performance in various tasks by 2030, changing the very fabric of economies worldwide.</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img
+              src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              class="news-image" alt="Politics">
+            <div class="news-body">
+              <h5 class="news-title">Global Talks</h5>
+              <p class="card-text">At the G20 summit, world leaders discuss climate policy, economic resilience, and
+                global peacekeeping. These summits are pivotal in shaping international cooperation and strategy for
+                global challenges, especially in light of recent conflicts and environmental threats.</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img src="https://i.pinimg.com/474x/0e/ca/e4/0ecae48201b9f920125dcfe4ea10a086.jpg" class="news-image"
+              alt="Sports">
+            <div class="news-body">
+              <h5 class="news-title">Sports Highlights</h5>
+              <p class="card-text">The finals delivered edge-of-the-seat drama as underdogs triumphed. Star players
+                delivered unforgettable performances, while emotional locker room moments reminded us of the human side of
+                sports.</p>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+    
+      <div class="row g-4 mt-4">
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img
+              src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              class="news-image" alt="Entertainment">
+            <div class="news-body">
+              <h5 class="news-title">Entertainment Buzz</h5>
+              <p class="card-text">The film industry's biggest night saw glitz, glamour, and heartfelt speeches. Directors
+                and actors shared behind-the-scenes stories, while fans celebrated cinematic milestones that inspired
+                millions.</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img src="https://i.pinimg.com/736x/1f/80/68/1f8068b60e33bfce654fcbf27097d12c.jpg" class="news-image"
+              alt="Finance">
+            <div class="news-body">
+              <h5 class="news-title">Market Watch</h5>
+              <p class="card-text">Investors are optimistic as global markets respond positively to inflation control and
+                job growth. Analysts forecast continued growth, though caution remains as geopolitical risks linger.</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img
+              src="data:image/jpeg;base64,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"
+              class="news-image" alt="Health">
+            <div class="news-body">
+              <h5 class="news-title">Health Update</h5>
+              <p class="card-text">Breakthroughs in medicine bring hope to millions. Researchers announce a new vaccine
+                platform that adapts rapidly to emerging diseases, improving preparedness for future pandemics.</p>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+    
+      <div class="row g-4 mt-4">
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img
+              src="https://i.pinimg.com/474x/41/6a/dd/416add5d8b8f0ea89bbcd78ef4471866.jpg"
+              class="news-image" alt="Environment">
+            <div class="news-body">
+              <h5 class="news-title">Green Push</h5>
+              <p class="card-text">Eco-initiatives are gaining ground. Governments and corporations are working to reduce
+                emissions and switch to renewable energy sources. Activists push for stronger commitments as climate
+                deadlines loom.</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img
+              src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              class="news-image" alt="Innovation">
+            <div class="news-body">
+              <h5 class="news-title">Innovation Drive</h5>
+              <p class="card-text">From space tourism to smart cities, tech pioneers are pushing boundaries. New
+                prototypes hint at a future that blends sustainability with cutting-edge design and AI integration.</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4 fade-in">
+          <div class="card news-card">
+            <img
+              src="https://i.pinimg.com/474x/95/c5/d0/95c5d0c94afd443187b0360b53b7f2e4.jpg"
+              class="news-image" alt="Education">
+            <div class="news-body">
+              <h5 class="news-title">Education Evolved</h5>
+              <p class="card-text">Virtual classrooms and AI tutors are redefining learning. Institutions globally are
+                adapting to digital demands, making education more accessible and personalized than ever before.</p>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+    </div>
+  <!-- ... (existing cards remain unchanged) -->
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Brilliant News Portal. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" title="Go to top">↑</button>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Fade-in animation on scroll
+    const fadeIns = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    fadeIns.forEach(el => observer.observe(el));
+
+    // Back to Top functionality
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.style.display = 'block';
+      } else {
+        backToTop.style.display = 'none';
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
 </body>
+
 </html>
